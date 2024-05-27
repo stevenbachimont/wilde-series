@@ -23,12 +23,12 @@ const programs = [
     },
 ];
 
-// Declare the action
+// Declare the actions
 
 const browse = (req, res) => {
     if (req.query.q != null) {
         const filteredPrograms = programs.filter((program) =>
-            program.title.includes(req.query.q)
+            program.synopsis.includes(req.query.q)
         );
 
         res.json(filteredPrograms);
@@ -38,11 +38,17 @@ const browse = (req, res) => {
 };
 
 const read = (req, res) => {
-    console.info(req.params);
+    const parsedId = parseInt(req.params.id, 10);
 
-    res.send(`Hello Program ${req.params.id} !`);
+    const program = programs.find((p) => p.id === parsedId);
+
+    if (program != null) {
+        res.json(program);
+    } else {
+        res.sendStatus(404);
+    }
 };
 
-// Export it to import it somewhere else
+// Export them to import them somewhere else
 
 module.exports = { browse, read };
